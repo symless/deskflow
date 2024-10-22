@@ -19,7 +19,6 @@ import lib.cmd_utils as cmd_utils
 import lib.env as env
 from lib.certificate import Certificate
 
-LOCK_FILE = "tmp/elevated.lock"
 MSBUILD_CMD = "msbuild"
 SIGNTOOL_CMD = "signtool"
 CERTUTIL_CMD = "certutil"
@@ -30,13 +29,9 @@ WIX_FILE = f"{BUILD_DIR}/installer/Synergy.sln"
 MSI_FILE = f"{BUILD_DIR}/installer/bin/Release/Synergy.msi"
 
 
-def run_elevated(script, args=None, use_sys_argv=True, wait_for_exit=False):
+def run_elevated(script, args=None, use_sys_argv=True):
     if not args and use_sys_argv:
         args = " ".join(sys.argv[1:])
-
-    if wait_for_exit:
-        args += f" --lock-file {LOCK_FILE}"
-        env.persist_lock_file(LOCK_FILE)
 
     command = f"{script} {args} --pause-on-exit"
     print(f"Running script with elevated privileges: {command}")
@@ -62,16 +57,6 @@ def run_elevated(script, args=None, use_sys_argv=True, wait_for_exit=False):
         )
 
     print("Script is running with elevated privileges")
-
-    if wait_for_exit:
-        with open(LOCK_FILE, "r") as f:
-            pid = f.read()
-
-        print(f"Waiting for elevated process to exit: {pid}")
-        while os.path.exists(LOCK_FILE):
-            # Intentionally wait forever, since this code should not run where a developer
-            # has no control, such as in a CI environment.
-            pass
 
 
 def is_admin():
