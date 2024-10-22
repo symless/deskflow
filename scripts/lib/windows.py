@@ -22,7 +22,6 @@ from lib.certificate import Certificate
 import lib.colors as colors
 import lib.file_utils as file_utils
 
-LOCK_FILE = "tmp/elevated.lock"
 MSBUILD_CMD = "msbuild"
 SIGNTOOL_CMD = "signtool"
 CERTUTIL_CMD = "certutil"
@@ -31,13 +30,9 @@ SERVICE_NOT_RUNNING_ERROR = 2
 ERROR_ACCESS_VIOLATION = 0xC0000005
 
 
-def run_elevated(script, args=None, use_sys_argv=True, wait_for_exit=False):
+def run_elevated(script, args=None, use_sys_argv=True):
     if not args and use_sys_argv:
         args = " ".join(sys.argv[1:])
-
-    if wait_for_exit:
-        args += f" --lock-file {LOCK_FILE}"
-        env.persist_lock_file(LOCK_FILE)
 
     command = f"{script} {args} --pause-on-exit"
     print(f"Running script with elevated privileges: {command}")
@@ -63,16 +58,6 @@ def run_elevated(script, args=None, use_sys_argv=True, wait_for_exit=False):
         )
 
     print("Script is running with elevated privileges")
-
-    if wait_for_exit:
-        with open(LOCK_FILE, "r") as f:
-            pid = f.read()
-
-        print(f"Waiting for elevated process to exit: {pid}")
-        while os.path.exists(LOCK_FILE):
-            # Intentionally wait forever, since this code should not run where a developer
-            # has no control, such as in a CI environment.
-            pass
 
 
 def is_admin():

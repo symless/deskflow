@@ -240,7 +240,7 @@ class Dependencies:
                     sys.exit(0)
             else:
                 windows.run_elevated(
-                    __file__, "--only-elevated --skip-python", wait_for_exit=True
+                    __file__, "--only-elevated --skip-python"
                 )
 
         qt = qt_utils.WindowsQt(*self.config.get_qt_config())
