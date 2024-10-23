@@ -16,7 +16,7 @@ jobs:
     if: ${{ vars.SONAR_SCANNER_ENABLED }}
 
     runs-on: ${{ vars.SONAR_SCANNER_RUNNER || 'ubuntu-24.04' }}
-    container: symless/synergy-core:ubuntu-22.04-amd64
+    container: deskflow/deskflow:ubuntu-22.04-amd64
     timeout-minutes: 20
 
     env:
