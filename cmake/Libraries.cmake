@@ -1,3 +1,5 @@
+include(FetchContent)
+
 set(LIBEI_MIN_VERSION 1.2.1)
 set(LIBPORTAL_MIN_VERSION 0.6)
 
@@ -110,7 +112,13 @@ macro(configure_unix_libs)
     configure_xorg_libs()
     configure_wayland_libs()
 
-    find_package(pugixml REQUIRED)
+    set(FETCHCONTENT_FULLY_DISCONNECTED ON)
+    FetchContent_Declare(
+      pugixml
+      GIT_REPOSITORY https://github.com/zeux/pugixml.git
+      GIT_TAG v1.13
+    )
+    FetchContent_MakeAvailable(pugixml)
 
     find_package(PkgConfig)
     if(PKG_CONFIG_FOUND)
