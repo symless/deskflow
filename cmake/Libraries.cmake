@@ -112,7 +112,6 @@ macro(configure_unix_libs)
     configure_xorg_libs()
     configure_wayland_libs()
 
-    set(FETCHCONTENT_FULLY_DISCONNECTED ON)
     FetchContent_Declare(
       pugixml
       GIT_REPOSITORY https://github.com/zeux/pugixml.git
