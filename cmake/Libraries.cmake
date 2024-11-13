@@ -281,6 +281,11 @@ macro(configure_libportal)
       set(HAVE_LIBPORTAL_CREATE_REMOTE_DESKTOP_SESSION_FULL true)
       set(HAVE_LIBPORTAL_INPUTCAPTURE true)
       set(HAVE_LIBPORTAL_OUTPUT_NONE true)
+
+      set(libportal_generated_dir ${CMAKE_BINARY_DIR}/meson/subprojects/libportal)
+      message(STATUS "libportal generated dir: ${libportal_generated_dir}")
+      list(APPEND LIBPORTAL_INCLUDE_DIRS ${libportal_generated_dir})
+
     else()
       message(WARNING "Local libportal not found")
     endif()
@@ -288,7 +293,6 @@ macro(configure_libportal)
 
   if(LIBPORTAL_FOUND)
     add_definitions(-DWINAPI_LIBPORTAL=1)
-    include_directories(${LIBPORTAL_INCLUDE_DIRS})
   endif()
 
 endmacro()

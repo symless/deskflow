@@ -67,6 +67,7 @@ include_directories(${inc})
 add_library(platform STATIC ${sources})
 target_link_libraries(platform client ${libs})
 
+
 macro(link_wayland_libs)
   target_link_libraries(platform ${LIBXKBCOMMON_LINK_LIBRARIES}
                         ${GLIB2_LINK_LIBRARIES} ${LIBM_LIBRARIES})
@@ -76,6 +77,7 @@ macro(link_wayland_libs)
   endif()
 
   if(LIBPORTAL_FOUND)
+    target_include_directories(platform PRIVATE ${LIBPORTAL_INCLUDE_DIRS})
     target_link_libraries(platform ${LIBPORTAL_LINK_LIBRARIES})
   endif()
 endmacro()
