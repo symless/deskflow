@@ -258,7 +258,9 @@ macro(configure_libportal)
 
     option(LIBPORTAL_STATIC "Use the static libportal binary" OFF)
     if(LIBPORTAL_STATIC)
-      set(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
+      message(STATUS "Forcing find library suffixes to .a")
+      set(last_find_suffixes ${CMAKE_FIND_LIBRARY_SUFFIXES})
+      set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
     endif()
 
     find_library(
@@ -266,6 +268,11 @@ macro(configure_libportal)
       NAMES portal
       PATHS ${libportal_bin_dir}
       NO_DEFAULT_PATH)
+
+    if(LIBPORTAL_STATIC)
+      message(STATUS "Restoring find library suffixes")
+      set(CMAKE_FIND_LIBRARY_SUFFIXES ${last_find_suffixes})
+    endif()
 
     if(LIBPORTAL_LINK_LIBRARIES)
       message(STATUS "Using local subproject libportal")
