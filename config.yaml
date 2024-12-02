@@ -48,10 +48,8 @@ config:
           libgtk-3-dev \
           libgtest-dev \
           libgmock-dev \
-          libpugixml-dev \
-          libei-dev \
-          libportal-dev
-        optional: [libei-dev, libportal-dev]
+          libei-dev
+        optional: [libei-dev]
 
     linuxmint:
       <<: *debian
@@ -80,10 +78,8 @@ config:
           gtk3-devel \
           gtest-devel \
           gmock-devel \
-          pugixml-devel \
-          libei-devel \
-          libportal-devel
-        optional: [libei-devel, libportal-devel]
+          libei-devel
+        optional: [libei-devel]
 
     # RHEL is not actually supported yet, since it doesn't have Qt6 libs.
     # We simply use it as a base for Alma Linux and Rocky Linux.
@@ -126,9 +122,7 @@ config:
           gtk3-devel \
           googletest-devel \
           googlemock-devel \
-          pugixml-devel \
-          libei-devel \
-          libportal-devel
+          libei-devel
 
     arch: &arch
       dependencies:
@@ -144,7 +138,6 @@ config:
           libnotify \
           libxkbfile \
           gtest \
-          pugixml \
           libei \
           libportal \
           qt6-base \

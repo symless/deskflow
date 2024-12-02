@@ -1,3 +1,5 @@
+include(FetchContent)
+
 set(LIBEI_MIN_VERSION 1.2.1)
 set(LIBPORTAL_MIN_VERSION 0.6)
 
@@ -110,7 +112,12 @@ macro(configure_unix_libs)
     configure_xorg_libs()
     configure_wayland_libs()
 
-    find_package(pugixml REQUIRED)
+    FetchContent_Declare(
+      pugixml
+      GIT_REPOSITORY https://github.com/zeux/pugixml.git
+      GIT_TAG v1.13
+    )
+    FetchContent_MakeAvailable(pugixml)
 
     find_package(PkgConfig)
     if(PKG_CONFIG_FOUND)
@@ -251,7 +258,9 @@ macro(configure_libportal)
 
     option(LIBPORTAL_STATIC "Use the static libportal binary" OFF)
     if(LIBPORTAL_STATIC)
-      set(CMAKE_FIND_LIBRARY_SUFFIXES .a ${CMAKE_FIND_LIBRARY_SUFFIXES})
+      message(STATUS "Forcing find library suffixes to .a")
+      set(last_find_suffixes ${CMAKE_FIND_LIBRARY_SUFFIXES})
+      set(CMAKE_FIND_LIBRARY_SUFFIXES .a)
     endif()
 
     find_library(
@@ -259,6 +268,11 @@ macro(configure_libportal)
       NAMES portal
       PATHS ${libportal_bin_dir}
       NO_DEFAULT_PATH)
+
+    if(LIBPORTAL_STATIC)
+      message(STATUS "Restoring find library suffixes")
+      set(CMAKE_FIND_LIBRARY_SUFFIXES ${last_find_suffixes})
+    endif()
 
     if(LIBPORTAL_LINK_LIBRARIES)
       message(STATUS "Using local subproject libportal")
@@ -274,6 +288,11 @@ macro(configure_libportal)
       set(HAVE_LIBPORTAL_CREATE_REMOTE_DESKTOP_SESSION_FULL true)
       set(HAVE_LIBPORTAL_INPUTCAPTURE true)
       set(HAVE_LIBPORTAL_OUTPUT_NONE true)
+
+      set(libportal_generated_dir ${CMAKE_BINARY_DIR}/meson/subprojects/libportal)
+      message(STATUS "libportal generated dir: ${libportal_generated_dir}")
+      list(APPEND LIBPORTAL_INCLUDE_DIRS ${libportal_generated_dir})
+
     else()
       message(WARNING "Local libportal not found")
     endif()
@@ -281,7 +300,6 @@ macro(configure_libportal)
 
   if(LIBPORTAL_FOUND)
     add_definitions(-DWINAPI_LIBPORTAL=1)
-    include_directories(${LIBPORTAL_INCLUDE_DIRS})
   endif()
 
 endmacro()
