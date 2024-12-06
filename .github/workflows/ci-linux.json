@@ -84,25 +84,25 @@
     },
     {
       "name": "opensuse-tumbleweed-amd64",
-      "like": "opensuse",
+      "like": "suse",
       "container": "opensuse/tumbleweed:latest",
       "runs-on": "ubuntu-latest"
     },
     {
       "name": "opensuse-leap-amd64",
-      "like": "opensuse",
+      "like": "suse",
       "container": "opensuse/leap:latest",
       "runs-on": "ubuntu-latest"
     },
     {
       "name": "rockylinux-9-amd64",
-      "like": "rhel",
+      "like": "fedora",
       "container": "rockylinux:9",
       "runs-on": "ubuntu-latest"
     },
     {
       "name": "almalinux-9-amd64",
-      "like": "rhel",
+      "like": "fedora",
       "container": "almalinux:9",
       "runs-on": "ubuntu-latest"
     },
