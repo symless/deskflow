@@ -1,0 +1,30 @@
+# SPDX-FileCopyrightText: 2024 Chris Rizzitello <sithlord48@gmail.com>
+# SPDX-License-Identifier: MIT
+
+name: "Install dependencies"
+
+inputs:
+  linux-like:
+    description: "Linux distro like, e.g. debian, fedora, suse, arch"
+    required: false
+
+runs:
+  using: "composite"
+
+  steps:
+    - name: Install Git
+      if: ${{ inputs.linux-like }}
+      shell: bash
+      run : |
+          if [ "${{inputs.linux-like}}" == "debian" ]; then
+            apt update -qqq > /dev/null && apt install -qqq git devscripts > /dev/null
+          elif [ "${{inputs.linux-like}}" == "fedora" ]; then
+            dnf install -y git
+          elif [ "${{inputs.linux-like}}" == "suse" ]; then
+            zypper refresh
+            zypper install -y --force-resolution git
+          elif [ "${{inputs.linux-like}}" == "arch" ]; then
+            pacman -Syu --noconfirm git
+          else
+            echo "Unknown: ${{inputs.linux-like}}"
+          fi

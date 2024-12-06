@@ -291,6 +291,11 @@ jobs:
       - name: Config Git safe dir
         run: git config --global --add safe.directory $GITHUB_WORKSPACE
 
+      - name: Install OS deps
+        uses: ./.github/actions/install-deps
+        with:
+          linux-like: ${{ matrix.distro.like }}
+
       - name: Install dependencies
         run: ./scripts/install_deps.py ${{ matrix.distro.extra-dep-args }}
         env:
@@ -319,36 +324,3 @@ jobs:
         with:
           name: ${{ env.PACKAGE_PREFIX }}-${{ matrix.distro.name }}
           path: ${{ env.PACKAGE_PATH }}
-
-  # Technically, "unix" is a misnomer, but we use it here to mean "Unix-like BSD-derived".
-  unix:
-    name: unix-${{ matrix.distro.name }}
-    runs-on: ${{ vars.CI_UNIX_RUNNER || 'ubuntu-24.04' }}
-    timeout-minutes: 20
-
-    env:
-      DESKFLOW_BUILD_CMD: |
-        ./scripts/install_deps.sh;
-        cmake -B build;
-        cmake --build build -j16;
-        export QT_QPA_PLATFORM=offscreen;
-        ./build/bin/unittests
-        ./build/bin/integtests
-
-    strategy:
-      fail-fast: false
-
-      matrix:
-        distro:
-          - name: freebsd
-
-    steps:
-      - name: Checkout
-        uses: actions/checkout@v4
-
-      - name: Build on FreeBSD
-        if: ${{ matrix.distro.name == 'freebsd' }}
-        uses: vmactions/freebsd-vm@v1
-        with:
-          usesh: true
-          run: ${{ env.DESKFLOW_BUILD_CMD }}
