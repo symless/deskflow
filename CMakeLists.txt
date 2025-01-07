@@ -38,42 +38,6 @@ set(DESKFLOW_VERSION_MINOR 18)
 set(DESKFLOW_VERSION_PATCH 0)
 set(DESKFLOW_VERSION_TWEAK 0)
 
-# Get the version from git if it's a git repository
-# cmake-format: off
-if(EXISTS ${CMAKE_CURRENT_SOURCE_DIR}/.git)
-  find_package(Git)
-  if(GIT_FOUND)
-    execute_process(
-      COMMAND ${GIT_EXECUTABLE} rev-parse --short=8 HEAD
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-      OUTPUT_VARIABLE GIT_SHA_SHORT
-      ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE
-    )
-    execute_process(
-      COMMAND ${GIT_EXECUTABLE} describe --long --match v* --always
-      WORKING_DIRECTORY "${CMAKE_CURRENT_SOURCE_DIR}"
-      OUTPUT_VARIABLE GITREV
-      ERROR_QUIET OUTPUT_STRIP_TRAILING_WHITESPACE)
-    string(FIND ${GITREV} "v" isRev)
-    if(NOT ifRev EQUAL -1)
-      string(REGEX MATCH [0-9]+ MAJOR ${GITREV})
-      string(REGEX MATCH \\.[0-9]+ MINOR ${GITREV})
-      string(REPLACE "." "" MINOR "${MINOR}")
-      string(REGEX MATCH [0-9]+\- PATCH ${GITREV})
-      string(REPLACE "-" "" PATCH "${PATCH}")
-      string(REGEX MATCH \-[0-9]+\- TWEAK ${GITREV})
-      string(REPLACE "-" "" TWEAK "${TWEAK}")
-      set(DESKFLOW_VERSION_MAJOR ${MAJOR})
-      set(DESKFLOW_VERSION_MINOR ${MINOR})
-      set(DESKFLOW_VERSION_PATCH ${PATCH})
-      set(DESKFLOW_VERSION_TWEAK ${TWEAK})
-    elseif(NOT ${GITREV} STREQUAL "")
-      set(DESKFLOW_VERSION_TWEAK ${GITREV})
-    endif()
-  endif()
-endif()
-# cmake-format: on
-
 set(DESKFLOW_VERSION
     "${DESKFLOW_VERSION_MAJOR}.${DESKFLOW_VERSION_MINOR}.${DESKFLOW_VERSION_PATCH}.${DESKFLOW_VERSION_TWEAK}"
 )
