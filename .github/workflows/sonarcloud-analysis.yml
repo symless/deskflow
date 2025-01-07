@@ -9,17 +9,12 @@ on:
 
 jobs:
   sonarcloud-analysis:
-    if: ${{ vars.SONAR_SCANNER_ENABLED }}
-
     runs-on: ubuntu-latest
     container: debian:trixie-slim
     timeout-minutes: 20
 
     env:
-      SONAR_SCANNER_VERSION: 6.1.0.4477
-      SONAR_SCANNER_OPTS: -server
-      SONAR_SCANNER_URL_BASE: https://binaries.sonarsource.com/Distribution/sonar-scanner-cli
-      CPU_CORE_COUNT: ${{ vars.SONAR_SCANNER_CPU_COUNT || 4 }}
+      CPU_CORE_COUNT: 4
 
     steps:
       - name: Install container dependencies
