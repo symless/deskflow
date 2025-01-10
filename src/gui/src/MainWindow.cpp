@@ -232,7 +232,7 @@ void MainWindow::connectSlots() {
 
   connect(
       &m_VersionChecker, &VersionChecker::updateFound, this,
-      &MainWindow::onVersionCheckUpdateFound);
+      &MainWindow::onVersionCheckerUpdateFound);
 
   connect(
       &m_WindowSaveTimer, &QTimer::timeout, this,
@@ -310,7 +310,7 @@ void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason) {
   }
 }
 
-void MainWindow::onVersionCheckUpdateFound(const QString &version) {
+void MainWindow::onVersionCheckerUpdateFound(const QString &version) {
   const auto link = QString(kLinkDownload).arg(kUrlDownload, kColorWhite);
   const auto text =
       QString("A new version is available (v%1). %2").arg(version, link);

@@ -103,7 +103,7 @@ private slots:
   void onCoreConnectionStateChanged(CoreProcess::ConnectionState state);
   void onCoreProcessStateChanged(CoreProcess::ProcessState state);
   void onCoreProcessSecureSocket(bool enabled);
-  void onVersionCheckUpdateFound(const QString &version);
+  void onVersionCheckerUpdateFound(const QString &version);
   void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
   void onWindowSaveTimerTimeout();
   void onServerConnectionConfigureClient(const QString &clientName);
