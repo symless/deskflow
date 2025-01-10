@@ -79,6 +79,7 @@ public:
   void open();
   ServerConfig &serverConfig() { return m_ServerConfig; }
   void autoAddScreen(const QString name);
+  void checkForUpdates();
 
 signals:
   void created();
@@ -102,7 +103,7 @@ private slots:
   void onCoreConnectionStateChanged(CoreProcess::ConnectionState state);
   void onCoreProcessStateChanged(CoreProcess::ProcessState state);
   void onCoreProcessSecureSocket(bool enabled);
-  void onVersionCheckerUpdateFound(const QString &version);
+  void onVersionCheckUpdateFound(const QString &version);
   void onTrayIconActivated(QSystemTrayIcon::ActivationReason reason);
   void onWindowSaveTimerTimeout();
   void onServerConnectionConfigureClient(const QString &clientName);

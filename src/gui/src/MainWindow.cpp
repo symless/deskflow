@@ -232,7 +232,7 @@ void MainWindow::connectSlots() {
 
   connect(
       &m_VersionChecker, &VersionChecker::updateFound, this,
-      &MainWindow::onVersionCheckerUpdateFound);
+      &MainWindow::onVersionCheckUpdateFound);
 
   connect(
       &m_WindowSaveTimer, &QTimer::timeout, this,
@@ -310,7 +310,7 @@ void MainWindow::onTrayIconActivated(QSystemTrayIcon::ActivationReason reason) {
   }
 }
 
-void MainWindow::onVersionCheckerUpdateFound(const QString &version) {
+void MainWindow::onVersionCheckUpdateFound(const QString &version) {
   const auto link = QString(kLinkDownload).arg(kUrlDownload, kColorWhite);
   const auto text =
       QString("A new version is available (v%1). %2").arg(version, link);
@@ -508,12 +508,6 @@ void MainWindow::open() {
 
   if (!m_AppConfig.enableUpdateCheck().has_value()) {
     m_AppConfig.setEnableUpdateCheck(messages::showUpdateCheckOption(this));
-  }
-
-  if (m_AppConfig.enableUpdateCheck().value()) {
-    m_VersionChecker.checkLatest();
-  } else {
-    qDebug("update check disabled");
   }
 
   if (m_AppConfig.startedBefore()) {
@@ -1035,4 +1029,12 @@ void MainWindow::showAndActivate() {
   showNormal();
   raise();
   activateWindow();
+}
+
+void MainWindow::checkForUpdates() {
+  if (m_AppConfig.enableUpdateCheck().value()) {
+    m_VersionChecker.checkLatest();
+  } else {
+    qDebug("update check disabled");
+  }
 }
