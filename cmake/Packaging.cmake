@@ -110,11 +110,11 @@ macro(configure_linux_packaging)
   set(CPACK_RPM_PACKAGE_GROUP "Applications/System")
 
   # HACK: Manually add deps for when shlibdeps doesn't detect them.
-  set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt6-base libpugixml1v5")
+  set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt6-base, libpugixml1v5")
 
   # We use the `openssl` binary to generate TLS certificates, but it's not a linked
   # dependency, so we must add it manually.
-  set(CPACK_RPM_PACKAGE_REQUIRES "openssl qt6-base libpugixml1")
+  set(CPACK_RPM_PACKAGE_REQUIRES "openssl, qt6-base, libpugixml1")
 
   # The default for CMake seems to be /usr/local, which seems uncommon. While
   # the default /usr/local prefix causes the app to appear on Debian and Fedora,
