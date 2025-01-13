@@ -92,12 +92,44 @@ macro(configure_mac_packaging)
 
 endmacro()
 
+macro(detect_linux)
+
+  if(EXISTS "/etc/os-release")
+    FILE(STRINGS "/etc/os-release" RELEASE_FILE_CONTENTS)
+  else()
+    message(FATAL_ERROR "Unable to read file /etc/os-release")
+  endif()
+
+  foreach(LINE IN LISTS RELEASE_FILE_CONTENTS)
+    if( "${LINE}" MATCHES "^ID=")
+      string(REGEX REPLACE "^ID=" "" DISTRO_NAME ${LINE})
+      string(REGEX REPLACE "\"" "" DISTRO_NAME ${DISTRO_NAME})
+      message(DEBUG "Distro Name :${DISTRO_NAME}")
+    elseif( "${LINE}" MATCHES "^ID_LIKE=")
+      string(REGEX REPLACE "^ID_LIKE=" "" DISTRO_LIKE "${LINE}")
+      string(REGEX REPLACE "\"" "" DISTRO_LIKE ${DISTRO_LIKE})
+      message(DEBUG "Distro Like :${DISTRO_LIKE}")
+    elseif( "${LINE}" MATCHES "^VERSION_CODENAME=")
+      string(REGEX REPLACE "^VERSION_CODENAME=" "" DISTRO_CODENAME "${LINE}")
+      string(REGEX REPLACE "\"" "" DISTRO_CODENAME "${DISTRO_CODENAME}")
+      message(DEBUG "Distro Codename:${DISTRO_CODENAME}")
+    elseif( "${LINE}" MATCHES "^VERSION_ID=")
+      string(REGEX REPLACE "^VERSION_ID=" "" DISTRO_VERSION_ID "${LINE}")
+      string(REGEX REPLACE "\"" "" DISTRO_VERSION_ID "${DISTRO_VERSION_ID}")
+      message(DEBUG "Distro VersionID:${DISTRO_VERSION_ID}")
+    endif()
+  endforeach()
+
+endmacro()
+
 #
 # Linux packages
 #
 macro(configure_linux_packaging)
 
   message(VERBOSE "Configuring Linux packaging")
+
+  detect_linux()
 
   set(CPACK_PACKAGE_VERSION ${DESKFLOW_VERSION_LINUX})
   set(CPACK_GENERATOR "DEB;RPM;TGZ")
@@ -109,12 +141,15 @@ macro(configure_linux_packaging)
   set(CPACK_RPM_PACKAGE_LICENSE "GPLv2")
   set(CPACK_RPM_PACKAGE_GROUP "Applications/System")
 
-  # HACK: Manually add deps for when shlibdeps doesn't detect them.
+  # Manually add deps for when shlibdeps doesn't detect them.
+  # Older versions of Debian/Ubuntu don't seem to detect the Qt dependencies or libpugixml.
   set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt6-qpa-plugins, libqt6widgets6, libpugixml1v5")
 
-  # We use the `openssl` binary to generate TLS certificates, but it's not a linked
-  # dependency, so we must add it manually.
-  set(CPACK_RPM_PACKAGE_REQUIRES "openssl, libQt6Widgets6, libpugixml1")
+   # Manually add deps for when RPM package doesn't detect them.
+  set(CPACK_RPM_PACKAGE_REQUIRE "openssl")
+  if (DISTRO_NAME MATCHES "opensuse")
+    set(CPACK_RPM_PACKAGE_REQUIRE "${CPACK_RPM_PACKAGE_REQUIRE}, libQt6Widgets6")
+  endif()
 
   # The default for CMake seems to be /usr/local, which seems uncommon. While
   # the default /usr/local prefix causes the app to appear on Debian and Fedora,
