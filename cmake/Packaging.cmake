@@ -145,9 +145,11 @@ macro(configure_linux_packaging)
   # Older versions of Debian/Ubuntu don't seem to detect the Qt dependencies or libpugixml.
   set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt6-qpa-plugins, libqt6widgets6, libpugixml1v5")
 
-   # Manually add deps for when RPM package doesn't detect them.
+  # Manually add deps for when RPM package doesn't detect them.
+  # OpenSSL isn't detected because it's an executable dependency (not a library).
   set(CPACK_RPM_PACKAGE_REQUIRE "openssl")
   if (DISTRO_NAME MATCHES "opensuse")
+    # RPM on OpenSUSE doesn't seem to detect libQt6Widgets6.
     set(CPACK_RPM_PACKAGE_REQUIRE "${CPACK_RPM_PACKAGE_REQUIRE}, libQt6Widgets6")
   endif()
 
