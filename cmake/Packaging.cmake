@@ -109,14 +109,12 @@ macro(configure_linux_packaging)
   set(CPACK_RPM_PACKAGE_LICENSE "GPLv2")
   set(CPACK_RPM_PACKAGE_GROUP "Applications/System")
 
-  # HACK: The GUI depends on the Qt6 QPA plugins package, but that's not picked
-  # up by shlibdeps on Ubuntu 22 (though not a problem on Ubuntu 24 and Debian
-  # 12), so we must add it manually.
-  set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt6-qpa-plugins")
+  # HACK: Manually add deps for when shlibdeps doesn't detect them.
+  set(CPACK_DEBIAN_PACKAGE_DEPENDS "qt6-base libpugixml1v5")
 
   # We use the `openssl` binary to generate TLS certificates, but it's not a linked
   # dependency, so we must add it manually.
-  set(CPACK_RPM_PACKAGE_REQUIRES "openssl")
+  set(CPACK_RPM_PACKAGE_REQUIRES "openssl qt6-base libpugixml1")
 
   # The default for CMake seems to be /usr/local, which seems uncommon. While
   # the default /usr/local prefix causes the app to appear on Debian and Fedora,
