@@ -42,7 +42,7 @@ def ensure_vcpkg(ci_env):
     else:
         print("Updating vcpkg...")
         repo = git.Repo("vcpkg")
-        repo.remotes.origin.pull()
+        repo.remotes.origin.fetch()
         checkout_vcpkg_tag(repo)
 
     if env.is_windows():
