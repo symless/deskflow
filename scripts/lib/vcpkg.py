@@ -19,6 +19,7 @@ import lib.env as env
 import lib.cmd_utils as cmd_utils
 
 GIT_REPO = "https://github.com/microsoft/vcpkg.git"
+GIT_TAG = "2024.12.16"
 
 
 def install(ci_env):
@@ -53,7 +54,8 @@ def ensure_vcpkg(ci_env):
 
 def get_vcpkg():
     print("Downloading vcpkg...")
-    git.Repo.clone_from(GIT_REPO, "vcpkg")
+    repo = git.Repo.clone_from(GIT_REPO, "vcpkg")
+    repo.git.checkout(GIT_TAG)
 
     os.chdir("vcpkg")
     try:
