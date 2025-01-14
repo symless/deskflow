@@ -37,12 +37,12 @@ def ensure_vcpkg(ci_env):
     if not os.path.exists("vcpkg"):
         print("Downloading vcpkg...")
         repo = git.Repo.clone_from(GIT_REPO, "vcpkg")
+        update_vcpkg(repo)
         bootstrap_vcpkg()
     else:
         print("Using existing vcpkg")
         repo = git.Repo("vcpkg")
-
-    update_vcpkg(repo)
+        update_vcpkg(repo)
 
     if env.is_windows():
         vcpkg_bin = "vcpkg/vcpkg.exe"
