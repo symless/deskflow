@@ -35,11 +35,14 @@ def ensure_vcpkg(ci_env):
         return "vcpkg"
 
     if not os.path.exists("vcpkg"):
-        get_vcpkg()
+        print("Downloading vcpkg...")
+        repo = git.Repo.clone_from(GIT_REPO, "vcpkg")
+        bootstrap_vcpkg()
     else:
         print("Updating vcpkg...")
         repo = git.Repo("vcpkg")
-        repo.remotes.origin.pull()
+
+    update_vcpkg(repo)
 
     if env.is_windows():
         vcpkg_bin = "vcpkg/vcpkg.exe"
@@ -52,11 +55,16 @@ def ensure_vcpkg(ci_env):
     return vcpkg_bin
 
 
-def get_vcpkg():
-    print("Downloading vcpkg...")
-    repo = git.Repo.clone_from(GIT_REPO, "vcpkg")
+def update_vcpkg(repo):
+    print("Updating vcpkg...")
+    repo.remotes.origin.pull()
+
+    print(f"Checking out vcpkg tag: {GIT_TAG}")
     repo.git.checkout(GIT_TAG)
 
+
+def bootstrap_vcpkg():
+    print("Bootstrapping vcpkg...")
     os.chdir("vcpkg")
     try:
         if env.is_windows():
