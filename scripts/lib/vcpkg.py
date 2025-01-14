@@ -39,6 +39,7 @@ def ensure_vcpkg(ci_env):
         repo = git.Repo.clone_from(GIT_REPO, "vcpkg")
         bootstrap_vcpkg()
     else:
+        print("Using existing vcpkg")
         repo = git.Repo("vcpkg")
 
     update_vcpkg(repo)
