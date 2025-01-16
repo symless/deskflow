@@ -19,6 +19,7 @@
 
 #include "common/constants.h"
 #include "gui_config.h" // IWYU pragma: keep
+#include <qlogging.h>
 
 #ifdef DESKFLOW_GUI_HOOK_HEADER
 #include DESKFLOW_GUI_HOOK_HEADER
@@ -66,11 +67,24 @@ void VersionChecker::checkLatest() const {
 }
 
 void VersionChecker::replyFinished(QNetworkReply *reply) {
-  auto newestVersion = QString(reply->readAll());
+  const auto httpStatus =
+      reply->attribute(QNetworkRequest::HttpStatusCodeAttribute).toInt();
+  if (reply->error() != QNetworkReply::NoError) {
+    qWarning(
+        "version check server error: %s", qPrintable(reply->errorString()));
+    qWarning("error checking for updates, http status: %d", httpStatus);
+    return;
+  }
+
+  qInfo("version check server success, http status: %d", httpStatus);
+
+  const auto newestVersion = QString(reply->readAll());
+  qDebug("version check response: %s", qPrintable(newestVersion));
+
   if (!newestVersion.isEmpty() &&
-      compareVersions(DESKFLOW_VERSION, newestVersion) > 0) {
-    qDebug("update found: %s", qPrintable(newestVersion));
-    emit updateFound(newestVersion);
+      compareVersions(kVersion, newestVersion) > 0) {
+    qDebug("update found");
+    Q_EMIT updateFound(newestVersion);
   } else {
     qDebug("no updates found");
   }
