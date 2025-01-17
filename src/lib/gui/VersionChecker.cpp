@@ -45,6 +45,20 @@ VersionChecker::VersionChecker(
       &VersionChecker::replyFinished);
 }
 
+void VersionChecker::fakeCheck(const QString &fakeVersion) {
+  if (compareVersions(kVersion, fakeVersion) > 0) {
+    qDebug(
+        "current version %s older than fake version %s", qPrintable(kVersion),
+        qPrintable(fakeVersion));
+    Q_EMIT updateFound(fakeVersion);
+    return;
+  } else {
+    qDebug(
+        "current version %s newer than fake version %s", qPrintable(kVersion),
+        qPrintable(fakeVersion));
+  }
+}
+
 void VersionChecker::checkLatest() const {
   QString url = deskflow::gui::env_vars::versionUrl();
 
@@ -81,12 +95,18 @@ void VersionChecker::replyFinished(QNetworkReply *reply) {
   const auto newestVersion = QString(reply->readAll());
   qDebug("version check response: %s", qPrintable(newestVersion));
 
-  if (!newestVersion.isEmpty() &&
-      compareVersions(kVersion, newestVersion) > 0) {
-    qDebug("update found");
+  if (newestVersion.isEmpty()) {
+    qWarning("version check response is empty");
+    return;
+  }
+
+  if (compareVersions(kVersion, newestVersion) > 0) {
+    qWarning(
+        "current version %s out of date, update available: %s",
+        qPrintable(kVersion), qPrintable(newestVersion));
     Q_EMIT updateFound(newestVersion);
   } else {
-    qDebug("no updates found");
+    qDebug("current version %s up to date", qPrintable(kVersion));
   }
 }
 
