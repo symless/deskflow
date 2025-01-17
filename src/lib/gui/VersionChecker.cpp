@@ -19,7 +19,6 @@
 
 #include "common/constants.h"
 #include "gui_config.h" // IWYU pragma: keep
-#include <qlogging.h>
 
 #ifdef DESKFLOW_GUI_HOOK_HEADER
 #include DESKFLOW_GUI_HOOK_HEADER
@@ -31,6 +30,7 @@
 #include <QNetworkRequest>
 #include <QProcess>
 #include <QRegularExpression>
+#include <QtCore>
 #include <memory>
 
 using namespace deskflow::gui;
