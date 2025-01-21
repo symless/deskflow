@@ -63,7 +63,7 @@
 		<Directory Id="TARGETDIR" Name="SourceDir">
 			<Directory Id="$(var.ProgramFilesFolder)">
 				<Directory Id="INSTALLFOLDER" Name="$(var.Name)">
-					<Directory Id="OpenSSLDir" Name="OpenSSL"/>
+					<Directory Id="OpenSslDir" Name="OpenSSL"/>
 					<Directory Id="QtPlatformsDir" Name="Platforms"/>
 					<Directory Id="QtStylesDir" Name="styles"/>
 					<Directory Id="QtTlsDir" Name="tls"/>
@@ -120,7 +120,7 @@
 				<File Id="QtTlsFile1" Source="$(var.BinDir)\tls\qopensslbackend.dll"/>
 			</Component>
 		</ComponentGroup>
-		<ComponentGroup Directory="OpenSSLDir" Id="OpenSslComponentGroup">
+		<ComponentGroup Directory="OpenSslDir" Id="OpenSslComponentGroup">
 			<Component Guid="92648F77-65A6-4B16-AC59-A1F37BD341B1" Id="OpenSslComponent">
 				<File Id="OpenSslFile1" Source="$(var.OpenSslDllDir)/libssl-3-x64.dll"/>
 				<File Id="OpenSslFile2" Source="$(var.OpenSslDllDir)/libcrypto-3-x64.dll"/>
