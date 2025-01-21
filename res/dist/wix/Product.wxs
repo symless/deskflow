@@ -10,16 +10,16 @@
 			<UpgradeVersion Minimum="0.0.0.0" Property="UPGRADE"/>
 		</Upgrade>
 		<Feature Id="ProductFeature" Title="$(var.Name)">
-			<ComponentGroupRef Id="ProductComponents"/>
-			<ComponentGroupRef Id="OpenSSLComponents"/>
-			<ComponentGroupRef Id="QtStylesComponents"/>
-			<ComponentGroupRef Id="QtPluginComponents"/>
-			<ComponentGroupRef Id="QtTlsComponents"/>
-			<ComponentRef Id="RegistryEntries"/>
+			<ComponentGroupRef Id="ProductComponentGroup" />
+			<ComponentGroupRef Id="OpenSslComponentGroup"/>
+			<ComponentGroupRef Id="QtStylesComponentGroup"/>
+			<ComponentGroupRef Id="QtPluginComponentGroup"/>
+			<ComponentGroupRef Id="QtTlsComponentGroup"/>
+			<ComponentRef Id="RegistryEntryComponent"/>
 			<MergeRef Id="VC_Redist"/>
 		</Feature>
 		<DirectoryRef Id="TARGETDIR">
-			<Component Guid="7CF3564D-1F8E-4D3D-9781-E1EE22D5BD67" Id="RegistryEntries">
+			<Component Guid="7CF3564D-1F8E-4D3D-9781-E1EE22D5BD67" Id="RegistryEntryComponent">
 				<RegistryKey Id="$(var.AppId)_server" ForceCreateOnInstall="yes" ForceDeleteOnUninstall="yes" Key="Software\Microsoft\Windows NT\CurrentVersion\AppCompatFlags\Layers" Root="HKLM">
 					<RegistryValue Name="[INSTALLFOLDER]$(var.ServerBin)" Type="string" Value="~ HIGHDPIAWARE WIN7RTM"/>
 				</RegistryKey>
@@ -73,7 +73,7 @@
 		</Directory>
 	</Fragment>
 	<Fragment>
-		<ComponentGroup Directory="INSTALLFOLDER" Id="ProductComponents">
+		<ComponentGroup Directory="INSTALLFOLDER" Id="ProductComponentGroup">
 			<Component Guid="EC9AD3B0-277C-4157-B5C8-5FD5B6A5F4AD" Id="Core">
 				<File KeyPath="yes" Source="$(var.BinDir)/$(var.DaemonBin)"/>
 				<ServiceInstall Description="Controls the $(var.Name) foreground processes." DisplayName="$(var.Name)" ErrorControl="normal" Id="ServiceInstall" Name="$(var.Name)" Start="auto" Type="ownProcess">
