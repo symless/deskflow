@@ -107,25 +107,25 @@
 		</ComponentGroup>
 		<ComponentGroup Directory="QtPlatformsDir" Id="QtPluginComponentGroup">
 			<Component Guid="684EFA14-856B-440E-A5E6-E90E04E36B41" Id="QtPlatformComponent">
-				<File Source="$(var.BinDir)\platforms\qwindows.dll"/>
+				<File Id="QtPlatformFile1" Source="$(var.BinDir)\platforms\qwindows.dll"/>
 			</Component>
 		</ComponentGroup>
 		<ComponentGroup Directory="QtStylesDir" Id="QtStylesComponentGroup">
 			<Component Guid="96E0F8D8-64FD-4CE8-94D1-F6EDCBBB4995" Id="QtStylesComponent">
-				<File Source="$(var.BinDir)\styles\qmodernwindowsstyle.dll"/>
+				<File Id="QtStylesFile1" Source="$(var.BinDir)\styles\qmodernwindowsstyle.dll"/>
 			</Component>
 		</ComponentGroup>
 		<ComponentGroup Directory="QtTlsDir" Id="QtTlsComponentGroup">
 			<Component Guid="61F2F744-5005-4CD3-A44D-88427F04BBE8" Id="QtTlsComponent">
-				<File Source="$(var.BinDir)\tls\qopensslbackend.dll"/>
+				<File Id="QtTlsFile1" Source="$(var.BinDir)\tls\qopensslbackend.dll"/>
 			</Component>
 		</ComponentGroup>
 		<ComponentGroup Directory="OpenSSLDir" Id="OpenSslComponentGroup">
 			<Component Guid="92648F77-65A6-4B16-AC59-A1F37BD341B1" Id="OpenSslComponent">
-				<File Source="$(var.OpenSslDllDir)/libssl-3-x64.dll"/>
-				<File Source="$(var.OpenSslDllDir)/libcrypto-3-x64.dll"/>
-				<File Source="$(var.OpenSslExeDir)/openssl.exe"/>			
-				<File Source="$(var.OpenSslExeDir)/openssl.cnf"/>
+				<File Id="OpenSslFile1" Source="$(var.OpenSslDllDir)/libssl-3-x64.dll"/>
+				<File Id="OpenSslFile2" Source="$(var.OpenSslDllDir)/libcrypto-3-x64.dll"/>
+				<File Id="OpenSslFile3" Source="$(var.OpenSslExeDir)/openssl.exe"/>			
+				<File Id="OpenSslFile4" Source="$(var.OpenSslExeDir)/openssl.cnf"/>
 			</Component>
 		</ComponentGroup>
 	</Fragment>
